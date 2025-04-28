@@ -137,3 +137,41 @@ SELECT S.SName, COUNT(E.RollNo) AS TotalStudents
 FROM SOCIETY S
 LEFT JOIN ENROLLMENT E ON S.SID = E.SID
 GROUP BY S.SName;
+
+---
+-- 24. Find student names enrolled in all the societies.
+SELECT s.Name
+FROM STUDENT s
+JOIN ENROLLMENT e ON s.RollNo = e.RollNo
+GROUP BY s.Name
+HAVING COUNT(DISTINCT e.SID) = (SELECT COUNT(*) FROM SOCIETY);
+
+-- 25. Count number of societies with more than 5 students enrolled in it.
+SELECT COUNT(DISTINCT SID)
+FROM ENROLLMENT
+GROUP BY SID
+HAVING COUNT(RollNo) > 5;
+
+-- 26. Add column Mobile number in student table with default value ‘9999999999’.
+ALTER TABLE STUDENT
+ADD COLUMN Mobile VARCHAR(10) DEFAULT '9999999999';
+
+-- 27. Find the total number of students whose age is > 20 years.
+SELECT COUNT(*) 
+FROM STUDENT
+WHERE YEAR(CURDATE()) - YEAR(DOB) > 20;
+
+-- 28. Find names of students who are born in 2001 and are enrolled in at least one society.
+SELECT s.Name
+FROM STUDENT s
+JOIN ENROLLMENT e ON s.RollNo = e.RollNo
+WHERE YEAR(s.DOB) = 2001;
+
+-- 29. Count all societies whose name starts with ‘S’ and ends with ‘t’ and at least 5 students are enrolled in the society.
+SELECT COUNT(*)
+FROM SOCIETY S
+JOIN ENROLLMENT E ON S.SID = E.SID
+WHERE S.SName LIKE 'S%t'
+GROUP BY S.SID
+HAVING COUNT(E.RollNo) >= 5;
+
